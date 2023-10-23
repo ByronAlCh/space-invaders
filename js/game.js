@@ -24,7 +24,7 @@ const Game = {
     jackie: undefined,
 
     //Densidad de los enemies
-    enemiesDensity: 50,
+    enemiesDensity: 200,
     livesDensity: 200,
 
     init() {
@@ -66,7 +66,7 @@ const Game = {
     createElements() {
         //   this.background = new Background(this.gameScreen, this.gameSize)
         // this.player = new Player(this.gameScreen, this.gameSize)
-        this.nave = new Nave(this.gameScreen, this.gameSize, this.liveNave, this.bulletsNave)
+        this.nave = new Nave(this.gameScreen, this.gameSize, this.liveNave,)
 
         this.jackie = new Jackie(this.gameScreen, this.gameSize, this.nave.navePos)
 
@@ -85,16 +85,45 @@ const Game = {
             this.framesCounter++
         }
 
+        if (this.framesCounter % 100 === 0 && this.enemiesDensity > 20) {
+            this.enemies.forEach(eachenemie => {
+                eachenemie.enemieVel.left++
+                console.log(eachenemie.enemieVel.left++)
+            })
+            this.enemiesDensity -= 10
+
+
+        }
+
+
+        /* if (this.framesCounter < 300) {
+             this.enemiesDensity = 120
+             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 2 })
+         } else if (this.framesCounter > 300 && this.framesCounter < 400) {
+             this.enemiesDensity = 110
+             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 3})
+         } else if (this.framesCounter > 400 && this.framesCounter < 500) {
+             this.enemiesDensity = 120
+             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 4 })
+         } else if (this.framesCounter > 300 && this.framesCounter < 400) {
+             this.enemiesDensity = 110
+             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 3 })
+         }*/
+
         this.drawAll()
         this.clearAll()
 
         this.generateEnemies()
         this.generateLives()
 
+        this.isCollisionLives()
+        this.isCollision()
+        this.isCollisionBugs()
+
         //this.isCollision() && this.gameOver()
-        if (this.isCollision() && this.nave.liveNave === 0) {
-            this.gameOver()
-        }
+        /* if (this.isCollision() && this.nave.liveNave === 0) {
+             this.gameOver()
+         }*/
 
         //this.isCollisionBugs()
 
@@ -170,6 +199,9 @@ const Game = {
                 const enemieCollision = this.enemies[i].enemieElement
                 enemieCollision.remove()
                 this.enemies.splice(i, 1)
+                if (this.nave.liveNave < 0) {
+                    this.nave.liveNave = 0 //AQUI HABRÍA QUE INVOCAR GAME OVER
+                }
 
                 console.log(this.nave.liveNave)
                 return true
@@ -181,20 +213,63 @@ const Game = {
     },
 
 
-    /* isCollisionBugs() {
-         for (let i = 0; i < this.enemies.length; i++) {
-             if (
-                 this.nave.bulletsNave[i].bulletPos.left + this.nave.bulletsNave[i].bulletSize.w
-                 >= this.enemies[i].enemiePos.left) {
-                 const enemieCollision = this.enemies[i].enemieElement
-                 enemieCollision.remove()
-                 this.enemies.splice(i, 1)
- 
-             }
- 
-         }
- 
-     },*/
+
+    isCollisionLives() {
+
+
+        for (let i = 0; i < this.lives.length; i++) {
+            if (
+
+                this.nave.navePos.left + this.nave.naveSize.w >= this.lives[i].livesPos.left &&
+                // Mira si el borde derecho de la nave se toca con el borde izquierdo del enemigo.
+                this.nave.navePos.top + this.nave.naveSize.h >= this.lives[i].livesPos.top &&
+                // Mira si el borde inferior de la nave toca con el borde superior de la nave del enemigo.
+                this.nave.navePos.left <= this.lives[i].livesPos.left + this.lives[i].livesSize.w &&
+                // Mira si el borde izquierdo de la nave toca con el borde derecho de la nave del enemigo.
+                this.nave.navePos.top <= this.lives[i].livesPos.top + this.lives[i].livesSize.h
+                //Mira si la parte superior de la nave toca con la parte inferior del elives
+            ) {
+                this.nave.liveNave++
+                const livesCollision = this.lives[i].livesElement
+                livesCollision.remove()
+                this.lives.splice(i, 1)
+                if (this.nave.liveNave > 6) {
+                    this.nave.liveNave = 6
+                }
+                console.log(this.nave.liveNave)
+                return true
+
+
+
+            }
+
+
+            //  this.counter()
+        }
+    },
+
+
+
+
+
+    isCollisionBugs() {
+        for (let i = 0; i < this.bulletsNave.length; i++) {
+
+
+            for (let j = 0; j < this.enemies.length; j++) {
+                if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left) {
+                    const enemieCollision = this.enemies[j].enemieElement
+                    enemieCollision.remove()
+                    this.enemies.splice(j, 1)
+
+                }
+
+            }
+        }
+
+
+
+    },
 
 
 
