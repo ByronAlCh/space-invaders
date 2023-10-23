@@ -1,9 +1,15 @@
 class BulletsNave {
-    constructor(gameScreen, navePos, naveSize) {
+    constructor(gameScreen, gameSize, navePos, naveSize) {
 
         this.gameScreen = gameScreen
-        this.navePos = navePos
-        this.naveSize = naveSize
+        this.gameSize = gameSize
+
+        //this.naveSize = naveSize
+
+        this.navePos = {
+            top: navePos.top,
+            left: navePos.left //por si aca
+        }
 
         this.bulletPos = {
             left: navePos.left + naveSize.w, // esto es para que salga del extremo derecho
@@ -40,6 +46,14 @@ class BulletsNave {
         this.bulletPos.left += this.bulletVel.left
 
         this.updatePosition()
+    }
+    getNavePosition() {
+        this.navePos.top = Game.nave.navePos.top
+        this.navePos.left = Game.nave.navePos.left
+        this.naveSize.width = Game.nave.naveSize.w
+        this.naveSize.height = Game.nave.naveSize.h
+
+
     }
 
     updatePosition() {

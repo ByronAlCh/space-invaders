@@ -7,8 +7,8 @@ class enemie {
 
 
         this.enemieSize = {
-            w: 25,
-            h: 25
+            w: 35,
+            h: 35
         }
 
         this.enemiePos = {

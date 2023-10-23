@@ -26,7 +26,7 @@ class Nave {
 
         }
 
-
+        this.liveNave = 3
 
         this.init()
 
@@ -40,7 +40,7 @@ class Nave {
         this.naveElement.style.left = `${this.navePos.left}px`
         this.naveElement.style.top = `${this.navePos.top}px`
         this.naveElement.style.backgroundColor = `black`
-        this.naveElement.style.borderRadius = '100%'
+        this.naveElement.style.borderRadius = '0%'
 
 
         document.querySelector('#game-screen').appendChild(this.naveElement)
@@ -57,9 +57,9 @@ class Nave {
 
     }
 
-    shoot() {
-        this.bulletsNave.push(new BulletsNave(this.gameScreen, this.navePos, this.naveSize))
-    }
+    /* shoot() { DE MOMENTO LO DEJAMOS AQUÍ --> VA A QUEDAR EN GAME
+         this.bulletsNave.push(new BulletsNave(this.gameScreen, this.navePos, this.naveSize))
+     } */
     moveTop() {
         if (this.navePos.top > this.limit.top) {
             this.naveElement.style.top = `${this.navePos.top}px`;
