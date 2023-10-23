@@ -156,7 +156,7 @@ const Game = {
     },
 
     shootNave() {
-        this.bulletsNave.push(new BulletsNave(this.gameScreen, this.gameSize, this.nave.navePos, this.nave.naveSize,))
+        this.bulletsNave.push(new BulletsNave(this.gameScreen, this.gameSize, this.nave.navePos, this.nave.naveSize, this.bulletPos, this.bulletSize))
     },
 
 
@@ -174,6 +174,13 @@ const Game = {
             if (eachlive.livesPos.left <= -20) {
                 eachlive.livesElement.remove()
                 this.lives.splice(idx, 1)
+            }
+        })
+        //limpiar balas
+        this.bulletsNave.forEach((eachBullet, idx) => {
+            if (eachBullet.bulletPos.left <= -20) {
+                eachBullet.bulletElement.remove()
+                this.bulletsNave.splice(idx, 1)
             }
         })
 
@@ -229,6 +236,7 @@ const Game = {
                 this.nave.navePos.top <= this.lives[i].livesPos.top + this.lives[i].livesSize.h
                 //Mira si la parte superior de la nave toca con la parte inferior del elives
             ) {
+
                 this.nave.liveNave++
                 const livesCollision = this.lives[i].livesElement
                 livesCollision.remove()
@@ -253,14 +261,28 @@ const Game = {
 
 
     isCollisionBugs() {
+
+
         for (let i = 0; i < this.bulletsNave.length; i++) {
 
 
             for (let j = 0; j < this.enemies.length; j++) {
-                if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left) {
+
+                if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left &&
+
+                    this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.enemies[j].enemiePos.top)
+
+                //this.bulletsNave[i].left <= this.enemies[j].enemiePos.left + this.enemies[j].enemieSize.w)
+
+                //this.bulletsNave[i].top <= this.enemies[j].enemiePos.top + this.enemies[j].enemieSize.h)
+                {
+
                     const enemieCollision = this.enemies[j].enemieElement
                     enemieCollision.remove()
                     this.enemies.splice(j, 1)
+                    const bulletCollision = this.bulletsNave[i].bulletElement
+                    bulletCollision.remove()
+                    this.bulletsNave.splice(i, 1)
 
                 }
 
