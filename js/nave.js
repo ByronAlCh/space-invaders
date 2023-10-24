@@ -57,6 +57,10 @@ class Nave {
 
     }
 
+    // stopNaveMove() {
+    //     cancelAnimationFrame(this.animationFrame);
+    // }
+
     /* shoot() { DE MOMENTO LO DEJAMOS AQUÍ --> VA A QUEDAR EN GAME
          this.bulletsNave.push(new BulletsNave(this.gameScreen, this.navePos, this.naveSize))
      } */
@@ -65,6 +69,7 @@ class Nave {
             this.naveElement.style.top = `${this.navePos.top}px`;
             this.navePos.top -= this.naveVel.top
         }
+
 
 
     }

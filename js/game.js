@@ -24,7 +24,7 @@ const Game = {
     jackie: undefined,
 
     //Densidad de los enemies
-    enemiesDensity: 200,
+    enemiesDensity: 100,
     livesDensity: 200,
 
     init() {
@@ -42,8 +42,10 @@ const Game = {
     setEventListerners() {
         document.onkeydown = event => {
             const { code } = event
+            // this.keyState[code] = true
 
             switch (code) {
+
                 case this.keys.TOP:
                     this.nave.moveTop()
                     break
@@ -56,7 +58,18 @@ const Game = {
             }
 
         }
+        /*  document.onkeyup = event => {
+              const { code } = event
+              this.keyState[code] = false
+              // switch (code) {
+              //     case this.keys.TOP:
+              //     case this.keys.BOTTOM:
+              //         this.nave.stopNaveMove()
+              //         break
+              // }
+          }*/
     },
+
 
     start() {
         this.createElements()
@@ -85,19 +98,12 @@ const Game = {
             this.framesCounter++
         }
 
-        while (this.framesCounter % 100 === 0 && this.enemiesDensity > 20) {
-            this.enemiesDensity -= 10
-            console.log(this.enemiesDensity)
-            this.enemies.forEach(eachEnemie => {
-                eachEnemie.enemieVel++
-                console.log(eachEnemie.enemieVel)
-                if (eachEnemie.enemieVel > 20) {
-                    eachEnemie.enemieVel = 20
 
-                }
-            })
-
+        this.enemiesDensity -= 0.5
+        if (this.enemiesDensity < 0) {
+            this.enemiesDensity = 10
         }
+        console.log(this.enemiesDensity)
 
 
 
