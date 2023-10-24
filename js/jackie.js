@@ -30,6 +30,7 @@ class Jackie {
         }
 
         this.init()
+        this.liveJackie = 5
 
     }
     init() {
@@ -53,6 +54,11 @@ class Jackie {
         const diferenciaDeMovimiento = this.navePos.top - this.jackiePos.top
         this.jackiePos.top = this.jackiePos.top + (diferenciaDeMovimiento * this.jackieVel.left)
         this.updatePosition()
+
+    }
+    shootJackie() {
+        const numeroDisparos = Math.floor(Math.random() * 20) + 1;
+
 
     }
     getNavePosition() {

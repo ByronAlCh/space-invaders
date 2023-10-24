@@ -9,7 +9,7 @@ const Game = {
     keys: {
         TOP: 'ArrowUp',
         BOTTOM: 'ArrowDown',
-        SHOOT: 'Space'
+        SHOOT: ' '
     },
 
     framesCounter: 0,
@@ -20,12 +20,14 @@ const Game = {
     bulletsNave: [],
     enemies: [],
     lives: [],
+    bulletsJackie: [],
 
     jackie: undefined,
 
     //Densidad de los enemies
-    enemiesDensity: 100,
+    enemiesDensity: 200,
     livesDensity: 200,
+    bulletsJackieDensity: 100,
 
     init() {
         this.setDimensions()
@@ -39,35 +41,31 @@ const Game = {
 
     },
 
-    setEventListerners() {
-        document.onkeydown = event => {
-            const { code } = event
-            // this.keyState[code] = true
+    getKey(key, state) {
+        switch (key) {
 
-            switch (code) {
-
-                case this.keys.TOP:
-                    this.nave.moveTop()
-                    break
-                case this.keys.BOTTOM:
-                    this.nave.moveBotton()
-                    break
-                case this.keys.SHOOT:
-                    this.shootNave()
-                    break
-            }
-
+            case this.keys.TOP:
+                this.nave.actions.top = state
+                break
+            case this.keys.BOTTOM:
+                this.nave.actions.bottom = state
+                break
+            case this.keys.SHOOT:
+                this.shootNave()
+                break
         }
-        /*  document.onkeyup = event => {
-              const { code } = event
-              this.keyState[code] = false
-              // switch (code) {
-              //     case this.keys.TOP:
-              //     case this.keys.BOTTOM:
-              //         this.nave.stopNaveMove()
-              //         break
-              // }
-          }*/
+
+
+    },
+
+    setEventListerners() {
+        document.addEventListener('keydown', event => {
+            this.getKey(event.key, true)
+        })
+        document.addEventListener('keyup', event => {
+            this.getKey(event.key, false)
+        })
+
     },
 
 
@@ -79,7 +77,7 @@ const Game = {
     createElements() {
         //   this.background = new Background(this.gameScreen, this.gameSize)
         // this.player = new Player(this.gameScreen, this.gameSize)
-        this.nave = new Nave(this.gameScreen, this.gameSize, this.liveNave,)
+        this.nave = new Nave(this.gameScreen, this.gameSize, this.liveNave)
 
         this.jackie = new Jackie(this.gameScreen, this.gameSize, this.nave.navePos)
 
@@ -98,13 +96,15 @@ const Game = {
             this.framesCounter++
         }
 
+        if (this.framesCounter % 200 === 0) {
+            this.enemiesDensity -= 15
 
-        this.enemiesDensity -= 0.5
-        if (this.enemiesDensity < 0) {
-            this.enemiesDensity = 10
+
         }
-        console.log(this.enemiesDensity)
-
+        else if (this.enemiesDensity <= 25) {
+            this.enemiesDensity = 25
+        }
+        //console.log(this.enemiesDensity)
 
 
 
@@ -113,10 +113,13 @@ const Game = {
 
         this.generateEnemies()
         this.generateLives()
+        this.shootJackie()
 
         this.isCollisionLives()
         this.isCollision()
         this.isCollisionBugs()
+        this.isCollisionBulletsJackie()
+        this.isCollisionBulletsNaveJackie()
         //this.isCollisionBullets()
 
         //this.isCollision() && this.gameOver()
@@ -137,6 +140,7 @@ const Game = {
         //esto da problemas
         this.lives.forEach(eachlives => { eachlives.move() })
         this.bulletsNave.forEach(eachbullet => { eachbullet.move() })
+        this.bulletsJackie.forEach(eachbullet => { eachbullet.move() })
 
         this.enemies.forEach(eachenemie => { eachenemie.move() })
 
@@ -157,7 +161,11 @@ const Game = {
     shootNave() {
         this.bulletsNave.push(new BulletsNave(this.gameScreen, this.gameSize, this.nave.navePos, this.nave.naveSize))
     },
-
+    shootJackie() {
+        if (this.framesCounter % this.bulletsJackieDensity === 0) {
+            this.bulletsJackie.push(new BulletsJackie(this.gameScreen, this.gameSize, this.jackie.jackiePos, this.jackie.jackieSize))
+        }
+    },
 
     //hacer funcion de generar enemigos= generate obstacles
     clearAll() {
@@ -213,7 +221,7 @@ const Game = {
                     this.nave.liveNave = 0 //AQUI HABRÍA QUE INVOCAR GAME OVER
                 }
 
-                console.log(this.nave.liveNave)
+                //console.log(this.nave.liveNave)
                 return true
             }
 
@@ -339,8 +347,66 @@ const Game = {
 
     // },
 
+    isCollisionBulletsJackie() {
+        for (let i = 0; i < this.bulletsJackie.length; i++) {
+            if (
+
+                this.bulletsJackie[i].bulletPos.left + this.bulletsJackie[i].bulletSize.w >= this.nave.navePos.left &&
+                // Mira si el borde derecho de la bala se toca con el izquierdo  de la nave.
+                this.bulletsJackie[i].bulletPos.top + this.bulletsJackie[i].bulletSize.h >= this.nave.navePos.top &&
+                // Mira si el borde inferior de la nave toca con el borde superior de la nave del enemigo.
+                this.bulletsJackie[i].bulletPos.left <= this.nave.navePos.left + this.nave.naveSize.w &&
+                // Mira si el borde izquierdo de la nave toca con el borde derecho de la nave del enemigo.
+                this.bulletsJackie[i].bulletPos.top <= this.nave.navePos.top + this.nave.naveSize.h
+                //Mira si la parte superior de la nave toca con la parte inferior del enemigo
+
+            ) {
+                console.log('hasta aqui funciono')
+                this.nave.liveNave--
+                const bulletCollision = this.bulletsJackie[i].bulletElement
+                bulletCollision.remove()
+                this.bulletsJackie.splice(i, 1)
+                if (this.nave.liveNave < 0) {
+                    this.nave.liveNave = 0
+                }
+
+                console.log(this.nave.liveNave)
+                return true
+            }
+
+        }
+    },
+
+    isCollisionBulletsNaveJackie() {
+        //  console.log("ARRAY ----->", this.enemies)
 
 
+        for (let i = 0; i < this.bulletsNave.length; i++) {
+            if (
+
+                this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.jackie.jackiePos.left &&
+                // Mira si el borde derecho de la bala se toca con el izquierdo  de la nave.
+                this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.jackie.jackiePos.top &&
+                // Mira si el borde inferior de la nave toca con el borde superior de la nave del enemigo.
+                this.bulletsNave[i].bulletPos.left <= this.jackie.jackiePos.left + this.jackie.jackieSize.w &&
+                // Mira si el borde izquierdo de la nave toca con el borde derecho de la nave del enemigo.
+                this.bulletsNave[i].bulletPos.top <= this.jackie.jackiePos.top + this.jackie.jackieSize.h
+                //Mira si la parte superior de la nave toca con la parte inferior del enemigo
+
+            ) {
+                console.log('hasta aqui funciono')
+                this.jackie.liveJackie--
+                const bulletCollision = this.bulletsNave[i].bulletElement
+                bulletCollision.remove()
+                this.bulletsNave.splice(i, 1)
+                if (this.jackie.liveJackie < 0) {
+                    this.jackie.liveJackie = 0
+                }
+                console.log('VIDAS JACKIE', this.jackie.liveJackie)
+                return true
+            }
+        }
+    },
 
 
 

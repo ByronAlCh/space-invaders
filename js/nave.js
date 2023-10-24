@@ -25,7 +25,10 @@ class Nave {
             bottom: this.gameSize.h - this.naveSize.h
 
         }
-
+        this.actions = {
+            top: false,
+            bottom: false
+        }
         this.liveNave = 3
 
         this.init()
@@ -49,8 +52,13 @@ class Nave {
 
     }
     move() {
+        this.moveTop()
+        this.moveBottom()
         this.updatePosition()
-        this.bulletsNave.forEach(eachBullet => eachBullet.move()) //esto invoca la función de movimiento para cada bala
+        this.bulletsNave.forEach(eachBullet => {
+            eachBullet.move()
+            eachBullet.updatePosition()
+        }) //esto invoca la función de movimiento para cada bala
         this.clearBullets()
 
 
@@ -65,7 +73,7 @@ class Nave {
          this.bulletsNave.push(new BulletsNave(this.gameScreen, this.navePos, this.naveSize))
      } */
     moveTop() {
-        if (this.navePos.top > this.limit.top) {
+        if (this.actions.top && this.navePos.top > this.limit.top) {
             this.naveElement.style.top = `${this.navePos.top}px`;
             this.navePos.top -= this.naveVel.top
         }
@@ -73,8 +81,8 @@ class Nave {
 
 
     }
-    moveBotton() {
-        if (this.navePos.top < this.limit.bottom) {
+    moveBottom() {
+        if (this.actions.bottom && this.navePos.top < this.limit.bottom) {
             this.naveElement.style.top = `${this.navePos.top}px`;
             this.navePos.top += this.naveVel.top
         }
