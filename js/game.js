@@ -85,30 +85,22 @@ const Game = {
             this.framesCounter++
         }
 
-        if (this.framesCounter % 100 === 0 && this.enemiesDensity > 20) {
-            this.enemies.forEach(eachenemie => {
-                eachenemie.enemieVel.left++
-                console.log(eachenemie.enemieVel.left++)
-            })
+        while (this.framesCounter % 100 === 0 && this.enemiesDensity > 20) {
             this.enemiesDensity -= 10
+            console.log(this.enemiesDensity)
+            this.enemies.forEach(eachEnemie => {
+                eachEnemie.enemieVel++
+                console.log(eachEnemie.enemieVel)
+                if (eachEnemie.enemieVel > 20) {
+                    eachEnemie.enemieVel = 20
 
+                }
+            })
 
         }
 
 
-        /* if (this.framesCounter < 300) {
-             this.enemiesDensity = 120
-             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 2 })
-         } else if (this.framesCounter > 300 && this.framesCounter < 400) {
-             this.enemiesDensity = 110
-             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 3})
-         } else if (this.framesCounter > 400 && this.framesCounter < 500) {
-             this.enemiesDensity = 120
-             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 4 })
-         } else if (this.framesCounter > 300 && this.framesCounter < 400) {
-             this.enemiesDensity = 110
-             this.enemies.forEach(eachenemie => { eachenemie.enemieVel.left = 3 })
-         }*/
+
 
         this.drawAll()
         this.clearAll()
@@ -119,13 +111,14 @@ const Game = {
         this.isCollisionLives()
         this.isCollision()
         this.isCollisionBugs()
+        //this.isCollisionBullets()
 
         //this.isCollision() && this.gameOver()
         /* if (this.isCollision() && this.nave.liveNave === 0) {
              this.gameOver()
          }*/
 
-        //this.isCollisionBugs()
+        this.isCollisionBugs()
 
         window.requestAnimationFrame(() => this.gameLoop())
 
@@ -156,7 +149,7 @@ const Game = {
     },
 
     shootNave() {
-        this.bulletsNave.push(new BulletsNave(this.gameScreen, this.gameSize, this.nave.navePos, this.nave.naveSize, this.bulletPos, this.bulletSize))
+        this.bulletsNave.push(new BulletsNave(this.gameScreen, this.gameSize, this.nave.navePos, this.nave.naveSize))
     },
 
 
@@ -177,12 +170,16 @@ const Game = {
             }
         })
         //limpiar balas
-        this.bulletsNave.forEach((eachBullet, idx) => {
-            if (eachBullet.bulletPos.left <= -20) {
-                eachBullet.bulletElement.remove()
-                this.bulletsNave.splice(idx, 1)
-            }
-        })
+        //if la long del array es 
+        if (this.bulletsNave.length > 0) {
+            this.bulletsNave.forEach((eachBullet, idx) => {
+                if (eachBullet.bulletPos.left <= -20) {
+                    eachBullet.bulletElement.remove()
+                    this.bulletsNave.splice(idx, 1)
+                }
+
+            })
+        }
 
 
     },
@@ -261,28 +258,37 @@ const Game = {
 
 
     isCollisionBugs() {
+        //  console.log("ARRAY ----->", this.enemies)
 
 
         for (let i = 0; i < this.bulletsNave.length; i++) {
 
 
             for (let j = 0; j < this.enemies.length; j++) {
+                // console.log("CADA ENEMIGO ------>", this.enemies[j])
+
 
                 if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left &&
+                    this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.enemies[j].enemiePos.top &&
 
-                    this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.enemies[j].enemiePos.top)
+                    this.bulletsNave[i].bulletPos.left <= this.enemies[j].enemiePos.left + this.enemies[j].enemieSize.w &&
+                    this.bulletsNave[i].bulletPos.top <= this.enemies[j].enemiePos.top + this.enemies[j].enemieSize.h) {
 
-                //this.bulletsNave[i].left <= this.enemies[j].enemiePos.left + this.enemies[j].enemieSize.w)
 
-                //this.bulletsNave[i].top <= this.enemies[j].enemiePos.top + this.enemies[j].enemieSize.h)
-                {
+                    console.log('colisiono bugs')
 
                     const enemieCollision = this.enemies[j].enemieElement
                     enemieCollision.remove()
                     this.enemies.splice(j, 1)
-                    const bulletCollision = this.bulletsNave[i].bulletElement
-                    bulletCollision.remove()
-                    this.bulletsNave.splice(i, 1)
+
+
+
+
+                    //const bulletCollision = this.bulletsNave[i].bulletElement
+                    //bulletCollision.remove()
+
+                    //
+                    //this.bulletsNave.splice(i, 1)//
 
                 }
 
@@ -292,6 +298,43 @@ const Game = {
 
 
     },
+
+
+    // isCollisionBullets() {
+    //     //  console.log("ARRAY ----->", this.enemies)
+
+
+    //     for (let i = 0; i < this.bulletsNave.length; i++) {
+
+
+    //         for (let j = 0; j < this.enemies.length; j++) {
+    //             console.log("CADA ENEMIGO ------>", this.enemies[j])
+
+
+    //             if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left &&
+    //                 this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.enemies[j].enemiePos.top &&
+
+    //                 this.bulletsNave[i].bulletPos.left <= this.enemies[j].enemiePos.left + this.enemies[j].enemieSize.w &&
+    //                 this.bulletsNave[i].bulletPos.top <= this.enemies[j].enemiePos.top + this.enemies[j].enemieSize.h) {
+
+
+    //                 console.log('colisiono balas')
+
+    //                 const bulletCollision = this.bulletsNave[i].bulletElement
+    //                 bulletCollision.remove()
+    //                 this.bulletsNave.splice(i, 1)
+
+    //             }
+
+    //         }
+    //     }
+
+
+
+    // },
+
+
+
 
 
 

@@ -19,8 +19,8 @@ class Jackie {
             //base no creo que necesitemos
         }
         this.jackieVel = {
-            left: 10,
-            top: 10,
+            left: 0.02,
+            top: 0.02,
         }
 
         this.limit = {
@@ -50,16 +50,16 @@ class Jackie {
     move() {
 
         this.getNavePosition()
-        this.jackiePos.top = this.navePos.top * .55
+        const diferenciaDeMovimiento = this.navePos.top - this.jackiePos.top
+        this.jackiePos.top = this.jackiePos.top + (diferenciaDeMovimiento * this.jackieVel.left)
         this.updatePosition()
-
 
     }
     getNavePosition() {
         this.navePos.top = Game.nave.navePos.top
     }
     updatePosition() {
-        this.jackieElement.style.top = `${this.jackiePos.top * .55}px`
+        this.jackieElement.style.top = `${this.jackiePos.top}px`
     }
 
 }

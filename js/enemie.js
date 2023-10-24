@@ -17,7 +17,7 @@ class enemie {
             //base no creo que necesitemos
         }
         this.enemieVel = {
-            left: 10,
+            left: 5,
             top: 10,
         }
 
