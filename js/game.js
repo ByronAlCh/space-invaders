@@ -13,21 +13,28 @@ const Game = {
     },
 
     framesCounter: 0,
+    bugsKilledCounter: 0,
 
-    // background: undefined,
+    background: undefined,
     nave: undefined,
 
     bulletsNave: [],
+    // doubleBullets: [],
     enemies: [],
     lives: [],
     bulletsJackie: [],
+    jackie: null,
+    // doubleBulletsBonus: [],
 
-    jackie: undefined,
 
-    //Densidad de los enemies
+    //Densidad de los enemies,lives and bonus.
     enemiesDensity: 200,
     livesDensity: 200,
     bulletsJackieDensity: 100,
+    // doubleBulletsDensityBonus: 200,
+
+    // counterVel: 5,
+    counterBonus: 0,
 
     init() {
         this.setDimensions()
@@ -75,12 +82,12 @@ const Game = {
     },
 
     createElements() {
-        //   this.background = new Background(this.gameScreen, this.gameSize)
+        this.background = new Background(this.gameScreen, this.gameSize)
         // this.player = new Player(this.gameScreen, this.gameSize)
         this.nave = new Nave(this.gameScreen, this.gameSize, this.liveNave)
 
-        this.jackie = new Jackie(this.gameScreen, this.gameSize, this.nave.navePos)
 
+        //this.doubleBulletsBonus = []
         this.lives = []
 
 
@@ -88,23 +95,68 @@ const Game = {
     },
 
     gameLoop() {
-
+        window.requestAnimationFrame(() => this.gameLoop())
         //preguntar a profes si esto es asi
-        if (this.framesCounter > 5000) {
+        if (this.framesCounter > 10000) {
             this.framesCounter = 0
+
+
         } else {
             this.framesCounter++
+
+
+
         }
+        //console.log(this.framesCounter)
 
         if (this.framesCounter % 200 === 0) {
-            this.enemiesDensity -= 15
-
-
-        }
-        else if (this.enemiesDensity <= 25) {
+            this.enemiesDensity -= 10
+            //console.log('enemigos:', this.enemiesDensity)
+        } else if (this.enemiesDensity <= 25) {
             this.enemiesDensity = 25
         }
-        //console.log(this.enemiesDensity)
+
+
+        if ((this.framesCounter > 1000 && this.framesCounter < 2000)) {
+            this.enemies.forEach(eachEnemie => {
+                eachEnemie.enemieVel.left = 9
+                //console.log(eachEnemie.enemieVel.left)
+            }
+            )
+
+        } else if ((this.framesCounter > 2000 && this.framesCounter < 3000)) {
+            this.enemies.forEach(eachEnemie => {
+                eachEnemie.enemieVel.left = 11
+                //console.log(eachEnemie.enemieVel.left)
+            }
+            )
+
+        } else if ((this.framesCounter > 3000 && this.framesCounter < 4000)) {
+            this.enemies.forEach(eachEnemie => {
+                eachEnemie.enemieVel.left = 13
+                //console.log(eachEnemie.enemieVel.left)
+            }
+            )
+
+        } else if ((this.framesCounter > 4000 && this.framesCounter < 5000)) {
+            this.enemies.forEach(eachEnemie => {
+                eachEnemie.enemieVel.left = 15
+                //console.log(eachEnemie.enemieVel.left)
+            }
+            )
+
+        }
+        else if ((this.framesCounter > 5000)) {
+            this.enemies.forEach(eachEnemie => {
+                eachEnemie.enemieVel.left = 20
+                this.enemiesDensity = 10
+                //console.log(eachEnemie.enemieVel.left)
+            }
+            )
+        }
+
+
+
 
 
 
@@ -113,32 +165,57 @@ const Game = {
 
         this.generateEnemies()
         this.generateLives()
-        this.shootJackie()
+        //  this.generateDoubleBulletsBonus()
+
+
+
+        /// JACKIE COSAS
+
+
 
         this.isCollisionLives()
         this.isCollision()
         this.isCollisionBugs()
-        this.isCollisionBulletsJackie()
-        this.isCollisionBulletsNaveJackie()
-        //this.isCollisionBullets()
+        //    this.isCollisionDoubleBulletsBonus()
 
-        //this.isCollision() && this.gameOver()
-        /* if (this.isCollision() && this.nave.liveNave === 0) {
-             this.gameOver()
-         }*/
+
+        //this.isCollisionBullets()
+        if (this.jackie) {
+            this.shootJackie()
+            this.isCollisionBulletsJackie()
+            this.isCollisionBulletsNaveJackie()
+
+        }
+
 
         this.isCollisionBugs()
+        this.createJackie()
 
-        window.requestAnimationFrame(() => this.gameLoop())
+
 
     },
 
+
+    createJackie() {
+        if (this.bugsKilledCounter > 10 && this.jackie === null) {
+            this.jackie = this.jackie = new Jackie(this.gameScreen, this.gameSize, this.nave.navePos)
+
+        }
+    },
+
+
+
+
     drawAll() {
-        this.jackie.move()
-        //   this.background.move()
-        this.nave.move()
+        if (this.jackie) {
+            this.jackie.move()
+
+        }
+        this.background.move()
+        this.nave.move(this.framesCounter)
         //esto da problemas
         this.lives.forEach(eachlives => { eachlives.move() })
+        //this.doubleBulletsBonus.forEach(eachDoubleBullets => { eachDoubleBullets.move() })
         this.bulletsNave.forEach(eachbullet => { eachbullet.move() })
         this.bulletsJackie.forEach(eachbullet => { eachbullet.move() })
 
@@ -150,6 +227,9 @@ const Game = {
     generateEnemies() {
         if (this.framesCounter % this.enemiesDensity === 0) {
             this.enemies.push(new enemie(this.gameScreen, this.gameSize))
+
+
+
         }
     },
     generateLives() {
@@ -157,9 +237,20 @@ const Game = {
             this.lives.push(new Lives(this.gameScreen, this.gameSize))
         }
     },
+    // generateDoubleBulletsBonus() {
+    //     if (this.framesCounter % this.doubleBulletsDensityBonus === 0) {
+    //         this.doubleBulletsBonus.push(new DoubleBulletsBonus(this.gameScreen, this.gameSize))
+    //     }
+    // },
 
     shootNave() {
+
+
+
+
         this.bulletsNave.push(new BulletsNave(this.gameScreen, this.gameSize, this.nave.navePos, this.nave.naveSize))
+
+
     },
     shootJackie() {
         if (this.framesCounter % this.bulletsJackieDensity === 0) {
@@ -214,6 +305,7 @@ const Game = {
 
             ) {
                 this.nave.liveNave--
+                this.counterBonus--
                 const enemieCollision = this.enemies[i].enemieElement
                 enemieCollision.remove()
                 this.enemies.splice(i, 1)
@@ -272,16 +364,13 @@ const Game = {
 
 
     isCollisionBugs() {
-        //  console.log("ARRAY ----->", this.enemies)
+
 
 
         for (let i = 0; i < this.bulletsNave.length; i++) {
 
 
             for (let j = 0; j < this.enemies.length; j++) {
-                // console.log("CADA ENEMIGO ------>", this.enemies[j])
-
-
                 if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left &&
                     this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.enemies[j].enemiePos.top &&
 
@@ -289,22 +378,20 @@ const Game = {
                     this.bulletsNave[i].bulletPos.top <= this.enemies[j].enemiePos.top + this.enemies[j].enemieSize.h) {
 
 
-                    console.log('colisiono bugs')
 
+                    // this.counterEnemiesKilled++
+                    // console.log(this.counterEnemiesKilled)
                     const enemieCollision = this.enemies[j].enemieElement
                     enemieCollision.remove()
                     this.enemies.splice(j, 1)
+                    this.bugsKilledCounter++
+                    console.log(this.bugsKilledCounter)
 
 
 
-
-                    //const bulletCollision = this.bulletsNave[i].bulletElement
-                    //bulletCollision.remove()
-
-                    //
-                    //this.bulletsNave.splice(i, 1)//
 
                 }
+
 
             }
         }
@@ -314,38 +401,9 @@ const Game = {
     },
 
 
-    // isCollisionBullets() {
-    //     //  console.log("ARRAY ----->", this.enemies)
-
-
-    //     for (let i = 0; i < this.bulletsNave.length; i++) {
-
-
-    //         for (let j = 0; j < this.enemies.length; j++) {
-    //             console.log("CADA ENEMIGO ------>", this.enemies[j])
-
-
-    //             if (this.bulletsNave[i].bulletPos.left + this.bulletsNave[i].bulletSize.w >= this.enemies[j].enemiePos.left &&
-    //                 this.bulletsNave[i].bulletPos.top + this.bulletsNave[i].bulletSize.h >= this.enemies[j].enemiePos.top &&
-
-    //                 this.bulletsNave[i].bulletPos.left <= this.enemies[j].enemiePos.left + this.enemies[j].enemieSize.w &&
-    //                 this.bulletsNave[i].bulletPos.top <= this.enemies[j].enemiePos.top + this.enemies[j].enemieSize.h) {
-
-
-    //                 console.log('colisiono balas')
-
-    //                 const bulletCollision = this.bulletsNave[i].bulletElement
-    //                 bulletCollision.remove()
-    //                 this.bulletsNave.splice(i, 1)
-
-    //             }
-
-    //         }
-    //     }
 
 
 
-    // },
 
     isCollisionBulletsJackie() {
         for (let i = 0; i < this.bulletsJackie.length; i++) {
@@ -363,6 +421,7 @@ const Game = {
             ) {
                 console.log('hasta aqui funciono')
                 this.nave.liveNave--
+                this.counterBonus--
                 const bulletCollision = this.bulletsJackie[i].bulletElement
                 bulletCollision.remove()
                 this.bulletsJackie.splice(i, 1)
@@ -378,7 +437,7 @@ const Game = {
     },
 
     isCollisionBulletsNaveJackie() {
-        //  console.log("ARRAY ----->", this.enemies)
+
 
 
         for (let i = 0; i < this.bulletsNave.length; i++) {
@@ -407,6 +466,39 @@ const Game = {
             }
         }
     },
+
+    //     isCollisionDoubleBulletsBonus() {
+
+
+    //     for(let i = 0; i< this.doubleBulletsBonus.length; i++) {
+    //         if (
+
+    //             this.nave.navePos.left + this.nave.naveSize.w >= this.doubleBulletsBonus[i].doubleBulletsBonusPos.left &&
+    //             // Mira si el borde derecho de la nave se toca con el borde izquierdo del enemigo.
+    //             this.nave.navePos.top + this.nave.naveSize.h >= this.doubleBulletsBonus[i].doubleBulletsBonusPos.top &&
+    //             // Mira si el borde inferior de la nave toca con el borde superior de la nave del enemigo.
+    //             this.nave.navePos.left <= this.doubleBulletsBonus[i].doubleBulletsBonusPos.left + this.doubleBulletsBonus[i].doubleBulletsBonusSize.w &&
+    //             // Mira si el borde izquierdo de la nave toca con el borde derecho de la nave del enemigo.
+    //             this.nave.navePos.top <= this.doubleBulletsBonus[i].doubleBulletsBonusPos.top + this.doubleBulletsBonus[i].//eBulletsBonusSize.h
+    //             //Mira si la parte superior de la nave toca con la parte inferior del elives
+    //         ) {
+
+    //     this.counterBonus++
+    //     if (this.counterBonus > 2) {
+    //         this.counterBonus = 1
+    //     }
+    //     console.log('BONUUS', this.counterBonus)
+    //     return true
+
+
+
+    // }
+
+
+    //  this.counter()
+    //}
+    // },
+
 
 
 

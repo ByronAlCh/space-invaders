@@ -8,6 +8,8 @@ class Jackie {
             left: navePos.left //por si aca
         }
 
+
+
         this.jackieSize = {
             w: 120,
             h: 120
@@ -32,10 +34,12 @@ class Jackie {
         this.init()
         this.liveJackie = 5
 
+
     }
     init() {
         this.jackieElement = document.createElement('div')
 
+        //this.jackieElement.style.display = 'none'
         this.jackieElement.style.position = 'absolute'
         this.jackieElement.style.width = `${this.jackieSize.w}px`
         this.jackieElement.style.height = `${this.jackieSize.h}px`

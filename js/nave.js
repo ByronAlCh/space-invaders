@@ -16,8 +16,8 @@ class Nave {
             //base no creo que necesitemos
         }
         this.naveVel = {
-            left: 30,
-            top: 30,
+            left: 5,
+            top: 5,
         }
 
         this.limit = {
@@ -31,6 +31,14 @@ class Nave {
         }
         this.liveNave = 3
 
+
+        this.naveSprite = {
+            backgroundPositionX: 0,
+            totalFrames: 3,
+            currentFrame: 1,
+            frameSpeed: 10
+        }
+
         this.init()
 
     }
@@ -42,8 +50,15 @@ class Nave {
         this.naveElement.style.height = `${this.naveSize.h}px`
         this.naveElement.style.left = `${this.navePos.left}px`
         this.naveElement.style.top = `${this.navePos.top}px`
-        this.naveElement.style.backgroundColor = `black`
+
         this.naveElement.style.borderRadius = '0%'
+
+        this.naveElement.style.backgroundImage = 'url(./img/maggie.png)'
+        this.naveElement.style.backgroundSize = '225px 75px'
+
+        this.naveElement.style.overflow = 'hidden'
+        this.naveElement.style.backgroundRepeat = 'no-repeat'
+        this.naveElement.style.backgroundPositionX = '0px'
 
 
         document.querySelector('#game-screen').appendChild(this.naveElement)
@@ -51,7 +66,10 @@ class Nave {
 
 
     }
-    move() {
+
+
+    move(framesCounter) {
+        this.animateSprite(framesCounter)
         this.moveTop()
         this.moveBottom()
         this.updatePosition()
@@ -64,6 +82,18 @@ class Nave {
 
 
     }
+    animateSprite(framesCounter) {
+        if (framesCounter % this.naveSprite.frameSpeed == 0) {
+            this.naveSprite.currentFrame++
+        }
+        if (this.naveSprite.currentFrame >= this.naveSprite.totalFrames) {
+            this.naveSprite.currentFrame = 0
+        }
+
+        this.naveSprite.backgroundPositionX = -this.naveSize.w * this.naveSprite.currentFrame
+        this.updateSprite()
+    }
+
 
     // stopNaveMove() {
     //     cancelAnimationFrame(this.animationFrame);
@@ -88,6 +118,11 @@ class Nave {
         }
 
     }
+
+    updateSprite() {
+        this.naveElement.style.backgroundPositionX = `${this.naveSprite.backgroundPositionX}px`
+    }
+
     updatePosition() {
         this.naveElement.style.top = `${this.navePos.top}px`
         this.naveElement.style.bottom = `${this.navePos.bottom}px`

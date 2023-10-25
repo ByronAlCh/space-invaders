@@ -38,6 +38,8 @@ class enemie {
         document.querySelector('#game-screen').appendChild(this.enemieElement)
     }
     move() {
+        //que sume a la veloxidad actual
+
         this.enemiePos.top += 0
         this.enemiePos.left -= this.enemieVel.left
         this.updatePosition()
