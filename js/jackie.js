@@ -11,12 +11,12 @@ class Jackie {
 
 
         this.jackieSize = {
-            w: 120,
-            h: 120
+            w: 350,
+            h: 350
         }
 
         this.jackiePos = {
-            left: this.gameSize.w - 150,
+            left: this.gameSize.w - 0,
             top: this.navePos.top
             //base no creo que necesitemos
         }
@@ -29,6 +29,13 @@ class Jackie {
             top: 0,
             bottom: this.gameSize.h - this.jackieSize.h
 
+        }
+
+        this.bossSprite = {
+            backgroundPositionX: 0,
+            totalFrames: 3,
+            currentFrame: 1,
+            frameSpeed: 5
         }
 
         this.init()
@@ -45,21 +52,40 @@ class Jackie {
         this.jackieElement.style.height = `${this.jackieSize.h}px`
         this.jackieElement.style.left = `${this.jackiePos.left}px`
         this.jackieElement.style.top = `${this.jackiePos.top}px`
-        this.jackieElement.style.backgroundColor = 'red'
-        this.jackieElement.style.borderRadius = '5%'
+
+
+        this.jackieElement.style.backgroundImage = 'url(./img/malo1.png)'
+        this.jackieElement.style.backgroundSize = '1050px 350px'
+
+        this.jackieElement.style.overflow = 'hidden'
+        this.jackieElement.style.backgroundRepeat = 'no-repeat'
+        this.jackieElement.style.backgroundPositionX = '0px'
 
         document.querySelector('#game-screen').appendChild(this.jackieElement)
 
 
     }
-    move() {
-
+    move(framesCounter) {
+        this.animateSprite(framesCounter)
         this.getNavePosition()
         const diferenciaDeMovimiento = this.navePos.top - this.jackiePos.top
         this.jackiePos.top = this.jackiePos.top + (diferenciaDeMovimiento * this.jackieVel.left)
         this.updatePosition()
 
     }
+
+    animateSprite(framesCounter) {
+        if (framesCounter % this.bossSprite.frameSpeed == 0) {
+            this.bossSprite.currentFrame++
+        }
+        if (this.bossSprite.currentFrame >= this.bossSprite.totalFrames) {
+            this.bossSprite.currentFrame = 0
+        }
+
+        this.bossSprite.backgroundPositionX = -this.jackieSize.w * this.bossSprite.currentFrame
+        this.updateSprite()
+    }
+
     shootJackie() {
         const numeroDisparos = Math.floor(Math.random() * 20) + 1;
 
@@ -67,6 +93,9 @@ class Jackie {
     }
     getNavePosition() {
         this.navePos.top = Game.nave.navePos.top
+    }
+    updateSprite() {
+        this.jackieElement.style.backgroundPositionX = `${this.bossSprite.backgroundPositionX}px`
     }
     updatePosition() {
         this.jackieElement.style.top = `${this.jackiePos.top}px`

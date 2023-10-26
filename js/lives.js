@@ -7,8 +7,8 @@ class Lives {
 
 
         this.livesSize = {
-            w: 25,
-            h: 25
+            w: 50,
+            h: 50
         }
 
         this.livesPos = {
@@ -17,8 +17,8 @@ class Lives {
             //base no creo que necesitemos
         }
         this.livesVel = {
-            left: 15,
-            top: 15,
+            left: 10,
+            top: 10,
         }
 
         this.init()
@@ -32,8 +32,13 @@ class Lives {
         this.livesElement.style.height = `${this.livesSize.h}px`
         this.livesElement.style.left = `${this.livesPos.left}px`
         this.livesElement.style.top = `${this.livesPos.top}px`
-        this.livesElement.style.backgroundColor = `green`
-        this.livesElement.style.borderRadius = '50%'
+
+        this.livesElement.style.backgroundImage = 'url(./img/rosquilla.png)'
+        this.livesElement.style.backgroundSize = '50px 50px'
+
+        this.livesElement.style.overflow = 'hidden'
+        this.livesElement.style.backgroundRepeat = 'no-repeat'
+        this.livesElement.style.backgroundPositionX = '0px'
 
         document.querySelector('#game-screen').appendChild(this.livesElement)
     }

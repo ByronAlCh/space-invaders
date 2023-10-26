@@ -6,8 +6,8 @@ class Nave {
         this.bulletsNave = []
 
         this.naveSize = {
-            w: 75,
-            h: 75
+            w: 150,
+            h: 150
         }
 
         this.navePos = {
@@ -54,7 +54,7 @@ class Nave {
         this.naveElement.style.borderRadius = '0%'
 
         this.naveElement.style.backgroundImage = 'url(./img/maggie1.png)'
-        this.naveElement.style.backgroundSize = '225px 75px'
+        this.naveElement.style.backgroundSize = '450px 150px'
 
         this.naveElement.style.overflow = 'hidden'
         this.naveElement.style.backgroundRepeat = 'no-repeat'

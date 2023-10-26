@@ -7,8 +7,8 @@ class Bonus {
 
 
         this.bonusSize = {
-            w: 25,
-            h: 25
+            w: 50,
+            h: 50
         }
 
         this.bonusPos = {
@@ -17,8 +17,8 @@ class Bonus {
             //base no creo que necesitemos
         }
         this.bonusVel = {
-            left: 15,
-            top: 15,
+            left: 10,
+            top: 10,
         }
 
         this.init()
@@ -32,8 +32,15 @@ class Bonus {
         this.bonusElement.style.height = `${this.bonusSize.h}px`
         this.bonusElement.style.left = `${this.bonusPos.left}px`
         this.bonusElement.style.top = `${this.bonusPos.top}px`
-        this.bonusElement.style.backgroundColor = `white`
         this.bonusElement.style.borderRadius = '50%'
+
+
+        this.bonusElement.style.backgroundImage = 'url(./img/duff.png)'
+        this.bonusElement.style.backgroundSize = '50px 50px'
+
+        this.bonusElement.style.overflow = 'hidden'
+        this.bonusElement.style.backgroundRepeat = 'no-repeat'
+        this.bonusElement.style.backgroundPositionX = '0px'
 
         document.querySelector('#game-screen').appendChild(this.bonusElement)
     }

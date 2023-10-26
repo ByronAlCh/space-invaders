@@ -7,8 +7,8 @@ class enemie {
 
 
         this.enemieSize = {
-            w: 35,
-            h: 35
+            w: 100,
+            h: 100
         }
 
         this.enemiePos = {
@@ -38,20 +38,41 @@ class enemie {
         this.enemieElement.style.height = `${this.enemieSize.h}px`
         this.enemieElement.style.left = `${this.enemiePos.left}px`
         this.enemieElement.style.top = `${this.enemiePos.top}px`
-        this.enemieElement.style.backgroundColor = `pink`
-        this.enemieElement.style.borderRadius = '50%'
 
-        this.enemieElement.style.backgroundSize =
 
-            document.querySelector('#game-screen').appendChild(this.enemieElement)
+        this.enemieElement.style.backgroundImage = 'url(./img/bug1.png)'
+        this.enemieElement.style.backgroundSize = '300px 100px'
+
+        this.enemieElement.style.overflow = 'hidden'
+        this.enemieElement.style.backgroundRepeat = 'no-repeat'
+        this.enemieElement.style.backgroundPositionX = '0px'
+
+
+        document.querySelector('#game-screen').appendChild(this.enemieElement)
     }
-    move() {
+    move(framesCounter) {
         //que sume a la veloxidad actual
+        this.animateSprite(framesCounter)
+
 
         this.enemiePos.top += 0
         this.enemiePos.left -= this.enemieVel.left
         this.updatePosition()
 
+    }
+
+    animateSprite(framesCounter) {
+        if (framesCounter % this.enemieSprite.frameSpeed == 0) {
+            this.enemieSprite.currentFrame++
+        }
+        if (this.enemieSprite.currentFrame >= this.enemieSprite.totalFrames) {
+            this.enemieSprite.currentFrame = 0
+        }
+        this.enemieSprite.backgroundPositionX = -this.enemieSize.w * this.enemieSprite.currentFrame
+        this.updateSprite()
+    }
+    updateSprite() {
+        this.enemieElement.style.backgroundPositionX = `${this.enemieSprite.backgroundPositionX}px`
     }
     updatePosition() {
         this.enemieElement.style.left = `${this.enemiePos.left}px`

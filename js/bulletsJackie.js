@@ -22,8 +22,15 @@ class BulletsJackie {
         }
 
         this.bulletSize = {
-            w: 10,
-            h: 10
+            w: 40,
+            h: 40
+        }
+
+        this.bulletsJackieSprite = {
+            backgroundPositionX: 0,
+            totalFrames: 3,
+            currentFrame: 1,
+            frameSpeed: 10
         }
         this.init()
 
@@ -37,16 +44,36 @@ class BulletsJackie {
         this.bulletElement.style.height = `${this.bulletSize.h}px`
         this.bulletElement.style.left = `${this.bulletPos.left}px`
         this.bulletElement.style.top = `${this.bulletPos.top}px`
-        this.bulletElement.style.backgroundColor = 'red'
-        this.bulletElement.style.borderRadius = '50%'
+
+
+        this.bulletElement.style.backgroundImage = 'url(./img/biberon.png)'
+        this.bulletElement.style.backgroundSize = '120px 40px'
+
+        this.bulletElement.style.overflow = 'hidden'
+        this.bulletElement.style.backgroundRepeat = 'no-repeat'
+        this.bulletElement.style.backgroundPositionX = '0px'
 
         this.gameScreen.appendChild(this.bulletElement)
     }
-    move() {
+    move(framesCounter) {
+        this.animateSprite(framesCounter)
         this.bulletPos.left -= this.bulletVel.left
 
         this.updatePosition()
     }
+
+    animateSprite(framesCounter) {
+        if (framesCounter % this.bulletsJackieSprite.frameSpeed == 0) {
+            this.bulletsJackieSprite.currentFrame++
+        }
+        if (this.bulletsJackieSprite.currentFrame >= this.bulletsJackieSprite.totalFrames) {
+            this.bulletsJackieSprite.currentFrame = 0
+        }
+
+        this.bulletsJackieSprite.backgroundPositionX = -this.bulletSize.w * this.bulletsJackieSprite.currentFrame
+        this.updateSprite()
+    }
+
     getJackieposition() {
         this.navePos.top = Game.jackie.jackiePos.top
         this.navePos.left = Game.jackie.jackiePos.left
@@ -54,6 +81,10 @@ class BulletsJackie {
         this.naveSize.height = Game.jackie.jackieSize.h
 
 
+    }
+
+    updateSprite() {
+        this.bulletElement.style.backgroundPositionX = `${this.bulletsJackieSprite.backgroundPositionX}px`
     }
 
     updatePosition() {

@@ -36,7 +36,7 @@ class Background {
     init() {
         this.fondo1 = document.createElement('img')
 
-        this.fondo1.src = "./img/bg.jpg"
+        this.fondo1.src = "./img/bg.png"
 
         this.fondo1.style.position = 'absolute'
 
@@ -49,7 +49,7 @@ class Background {
 
         this.fondo2 = document.createElement('img')
 
-        this.fondo2.src = "./img/bg.jpg"
+        this.fondo2.src = "./img/bg2.png"
 
         this.fondo2.style.position = 'absolute'
         this.fondo2.style.width = `${this.backgroundSize2.w}px`

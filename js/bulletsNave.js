@@ -22,8 +22,14 @@ class BulletsNave {
         }
 
         this.bulletSize = {
-            w: 10,
-            h: 10
+            w: 40,
+            h: 40
+        }
+        this.bulletsSprite = {
+            backgroundPositionX: 0,
+            totalFrames: 4,
+            currentFrame: 1,
+            frameSpeed: 40
         }
         this.init()
 
@@ -37,16 +43,37 @@ class BulletsNave {
         this.bulletElement.style.height = `${this.bulletSize.h}px`
         this.bulletElement.style.left = `${this.bulletPos.left}px`
         this.bulletElement.style.top = `${this.bulletPos.top}px`
-        this.bulletElement.style.backgroundColor = 'blue'
-        this.bulletElement.style.borderRadius = '50%'
+
+
+
+        this.bulletElement.style.backgroundImage = 'url(./img/chupete2.png)'
+        this.bulletElement.style.backgroundSize = '160px 40px'
+
+        this.bulletElement.style.overflow = 'hidden'
+        this.bulletElement.style.backgroundRepeat = 'no-repeat'
+        this.bulletElement.style.backgroundPositionX = '0px'
 
         this.gameScreen.appendChild(this.bulletElement)
     }
-    move() {
+    move(framesCounter) {
+        this.animateSprite(framesCounter)
         this.bulletPos.left += this.bulletVel.left
 
         this.updatePosition()
     }
+
+    animateSprite(framesCounter) {
+        if (framesCounter % this.bulletsSprite.frameSpeed == 0) {
+            this.bulletsSprite.currentFrame++
+        }
+        if (this.bulletsSprite.currentFrame >= this.bulletsSprite.totalFrames) {
+            this.bulletsSprite.currentFrame = 0
+        }
+
+        this.bulletsSprite.backgroundPositionX = -this.bulletSize.w * this.bulletsSprite.currentFrame
+        this.updateSprite()
+    }
+
     getNavePosition() {
         this.navePos.top = Game.nave.navePos.top
         this.navePos.left = Game.nave.navePos.left
@@ -54,6 +81,10 @@ class BulletsNave {
         this.naveSize.height = Game.nave.naveSize.h
 
 
+    }
+
+    updateSprite() {
+        this.bulletElement.style.backgroundPositionX = `${this.bulletsSprite.backgroundPositionX}px`
     }
 
     updatePosition() {
