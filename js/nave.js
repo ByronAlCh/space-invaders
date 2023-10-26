@@ -53,7 +53,7 @@ class Nave {
 
         this.naveElement.style.borderRadius = '0%'
 
-        this.naveElement.style.backgroundImage = 'url(./img/maggie.png)'
+        this.naveElement.style.backgroundImage = 'url(./img/maggie1.png)'
         this.naveElement.style.backgroundSize = '225px 75px'
 
         this.naveElement.style.overflow = 'hidden'

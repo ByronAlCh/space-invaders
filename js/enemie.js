@@ -21,6 +21,12 @@ class enemie {
             top: 10,
         }
 
+        this.enemieSprite = {
+            backgroundPositionX: 0,
+            totalFrames: 3,
+            currentFrame: 1,
+            frameSpeed: 10
+        }
         this.init()
 
     }
