@@ -26,7 +26,7 @@ class Background {
 
         }
         this.backgroundVel = {
-            left: .5
+            left: 0.5
         }
 
 
@@ -36,7 +36,7 @@ class Background {
     init() {
         this.fondo1 = document.createElement('img')
 
-        this.fondo1.src = "./img/bg.png"
+        this.fondo1.src = "./img/bg1.png"
 
         this.fondo1.style.position = 'absolute'
 
@@ -62,13 +62,20 @@ class Background {
 
     }
     move() {
+        this.backgroundPosition1.left -= this.backgroundVel.left;
+        this.backgroundPosition2.left -= this.backgroundVel.left;
+
+
         if (this.backgroundPosition1.left <= -this.backgroundSize.w) {
-            this.backgroundPosition1.left = 0
-            this.backgroundPosition2.left = this.backgroundSize.w
+
+            this.backgroundPosition1.left = this.backgroundPosition2.left + this.backgroundSize.w;
         }
 
-        this.backgroundPosition1.left -= this.backgroundVel.left
-        this.backgroundPosition2.left -= this.backgroundVel.left
+
+        if (this.backgroundPosition2.left <= -this.backgroundSize.w) {
+
+            this.backgroundPosition2.left = this.backgroundPosition1.left + this.backgroundSize.w;
+        }
         this.updatePosition()
 
     }

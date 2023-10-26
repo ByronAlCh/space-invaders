@@ -11,12 +11,12 @@ class Jackie {
 
 
         this.jackieSize = {
-            w: 350,
-            h: 350
+            w: 200,
+            h: 200
         }
 
         this.jackiePos = {
-            left: this.gameSize.w - 0,
+            left: this.gameSize.w - 200,
             top: this.navePos.top
             //base no creo que necesitemos
         }
@@ -55,7 +55,7 @@ class Jackie {
 
 
         this.jackieElement.style.backgroundImage = 'url(./img/malo1.png)'
-        this.jackieElement.style.backgroundSize = '1050px 350px'
+        this.jackieElement.style.backgroundSize = '600px 200px'
 
         this.jackieElement.style.overflow = 'hidden'
         this.jackieElement.style.backgroundRepeat = 'no-repeat'

@@ -28,10 +28,12 @@ const Game = {
 
 
     //Densidad de los enemies,lives and bonus.
-    enemiesDensity: 50,
+    enemiesDensity: 100,
     livesDensity: 200,
-    bulletsJackieDensity: 100,
-    bonusDensity: 200,
+    bulletsJackieDensity: 70,
+    bonusDensity: 500,
+
+    gameSound: new Audio("./mp3/Los Simpson - Intro Latino.mp3"),
 
     // counterVel: 5,
     // counterBonus: 0,
@@ -95,8 +97,9 @@ const Game = {
     },
 
     gameLoop() {
+        this.gameSound.play()
         //preguntar a profes si esto es asi
-        if (this.framesCounter > 7000) {
+        if (this.framesCounter > 10000) {
             this.framesCounter = 0
 
 
@@ -549,7 +552,7 @@ const Game = {
             ) {
 
                 this.enemies.forEach(eachEnemie => {
-                    eachEnemie.enemieVel.left = 11
+                    eachEnemie.enemieVel.left = 1
                     //console.log(eachEnemie.enemieVel.left)
                 }
                 )

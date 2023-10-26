@@ -17,13 +17,13 @@ class BulletsJackie {
         }
 
         this.bulletVel = {
-            left: 15,
+            left: 12,
             //top y gravedad no necesitamos
         }
 
         this.bulletSize = {
-            w: 40,
-            h: 40
+            w: 60,
+            h: 60
         }
 
         this.bulletsJackieSprite = {
@@ -47,7 +47,7 @@ class BulletsJackie {
 
 
         this.bulletElement.style.backgroundImage = 'url(./img/biberon.png)'
-        this.bulletElement.style.backgroundSize = '120px 40px'
+        this.bulletElement.style.backgroundSize = '180px 60px'
 
         this.bulletElement.style.overflow = 'hidden'
         this.bulletElement.style.backgroundRepeat = 'no-repeat'
