@@ -41,7 +41,9 @@ class enemie {
         this.enemieElement.style.backgroundColor = `pink`
         this.enemieElement.style.borderRadius = '50%'
 
-        document.querySelector('#game-screen').appendChild(this.enemieElement)
+        this.enemieElement.style.backgroundSize =
+
+            document.querySelector('#game-screen').appendChild(this.enemieElement)
     }
     move() {
         //que sume a la veloxidad actual

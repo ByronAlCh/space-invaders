@@ -12,12 +12,12 @@ class DoubleBullets {
         }
 
         this.bulletPos1 = {
-            left: navePos.left + naveSize.w, // esto es para que salga del extremo derecho
-            top: 22 - ((naveSize.h / 2) / 2)// esto es para que salga del medio de la nave
+            left: navePos.left + naveSize.w + 70, // esto es para que salga del extremo derecho
+            top: (navePos.top + naveSize.h / 2 + ((naveSize.h / 2) / 2)) + 10// esto es para que salga del medio de la nave
         }
         this.bulletPos2 = {
             left: navePos.left + naveSize.w, // esto es para que salga del extremo derecho
-            top: navePos.top + naveSize.h / 2 + - ((naveSize.h / 2) / 2)// esto es para que salga del medio de la nave
+            top: navePos.top + naveSize.h / 2 - ((naveSize.h / 2) / 2) - 10// esto es para que salga del medio de la nave
         }
 
         this.bulletVel = {
@@ -51,8 +51,8 @@ class DoubleBullets {
         this.bulletElement2.style.position = 'absolute'
         this.bulletElement2.style.width = `${this.bulletSize.w}px`
         this.bulletElement2.style.height = `${this.bulletSize.h}px`
-        this.bulletElement2.style.left = `${this.bulletPos.left}px`
-        this.bulletElement2.style.top = `${this.bulletPos.top}px`
+        this.bulletElement2.style.left = `${this.bulletPos2.left}px`
+        this.bulletElement2.style.top = `${this.bulletPos2.top}px`
         this.bulletElement2.style.backgroundColor = 'blue'
         this.bulletElement2.style.borderRadius = '50%'
 
@@ -61,6 +61,7 @@ class DoubleBullets {
     move() {
         this.bulletPos1.left += this.bulletVel.left
         this.bulletPos2.left += this.bulletVel.left
+
 
         this.updatePosition()
     }
